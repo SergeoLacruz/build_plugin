@@ -8,6 +8,8 @@ that are needed in case you wand to have PCBs manufactured by an external partne
 data is stored in the metadata area of the build. Additional data is exported to the 
 report context using the report mixin.
 
+![build_plugin](https://github.com/SergeoLacruz/build_plugin/blob/master/pictures/build_plugin.png)
+
 A report template is provided that creates a request for quotation that can be sent out 
 to the external partner. This RFQ is based on data in the InvenTree database and on additional
 data from the plugin. So for the report to work you need to setup companies with addresses and 

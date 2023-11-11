@@ -9,7 +9,6 @@ from plugin import InvenTreePlugin
 from plugin.mixins import PanelMixin, SettingsMixin, UrlsMixin, ReportMixin
 from company.models import Company, Contact
 from users.models import check_user_role
-from django.views.generic.edit import FormView
 
 import json
 
