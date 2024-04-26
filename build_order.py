@@ -1,5 +1,5 @@
-from django.conf.urls import url
-#from django.urls import re_path
+#from django.conf.urls import url
+from django.urls import re_path
 #from django.urls import path
 from django.http import HttpResponse
 
@@ -9,6 +9,7 @@ from plugin import InvenTreePlugin
 from plugin.mixins import PanelMixin, SettingsMixin, UrlsMixin, ReportMixin
 from company.models import Company, Contact
 from users.models import check_user_role
+from django.views.generic.edit import FormView
 
 import json
 
@@ -98,7 +99,7 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
 
     def setup_urls(self):
         return [
-                url(r'bocompanyselect(?:\.(?P<format>json))?$', self.process_data, name='transfer_build_data'),
+                re_path(r'bocompanyselect(?:\.(?P<format>json))?$', self.process_data, name='transfer_build_data'),
                ]
 
 #------------------------- Helper functions ------------------------------------
