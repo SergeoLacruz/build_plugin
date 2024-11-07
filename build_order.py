@@ -52,11 +52,11 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             self.RelatedPCB=list(self.build.part.get_related_parts())[0]
 
             try:
-                WePK=int(self.get_setting('MY_PK'))
+                customer_pk=int(self.get_setting('MY_PK'))
             except:
                 raise ValueError('MY_PK in properly set. Please check settings')       
-            self.We=Company.objects.get(pk=WePK)
-            self.WeContacts=Contact.objects.filter(company=WePK)
+            self.customer_company=Company.objects.get(pk=customer_pk)
+            self.all_customer_contacts=Contact.objects.filter(company=customer_pk)
 
             # Select the attachments
             for p in self.build.attachments.all():
@@ -64,9 +64,9 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
                 print('Name:',p.attachment)
 
             # Calculate the total number of components on the board
-            self.TotalNumberOfComponents=0
+            self.total_components=0
             for p in self.build.part.bom_items.all():
-                self.TotalNumberOfComponents = self.TotalNumberOfComponents + p.quantity
+                self.total_components = self.total_components + p.quantity
 
             # Grab metadata if exist and create the context variables for the report
             try:
@@ -82,10 +82,10 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             except:
                 print('error customer_contact')
 
-            HasPermission=(check_user_role(view.request.user, 'build_order','change') or 
+            has_permission=(check_user_role(view.request.user, 'build_order','change') or 
                            check_user_role(view.request.user, 'build_order','delete') or
                            check_user_role(view.request.user, 'build_order','add'))
-            if HasPermission:
+            if has_permission:
                 panels.append({
                     'title': 'Manufacturig Info',
                     'icon': 'fa-industry',

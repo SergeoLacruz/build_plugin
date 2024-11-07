@@ -53,7 +53,7 @@ function ListenEvent(){
     </tr>
     <tr>
         <td> Total number of components </td>
-        <td> {{ plugin.TotalNumberOfComponents }} </td>
+        <td> {{ plugin.total_components }} </td>
     </tr>
     <tr>
         <td> Number of Layers </td>
@@ -138,7 +138,7 @@ function ListenEvent(){
         <td> Technical Contact </td>
         <td> 
             <select id="customer_contact_field">
-                {% for tc in plugin.WeContacts %}
+                {% for tc in plugin.all_customer_contacts %}
 		    {% if tc.pk == build.metadata.customer_contact %}
 			<option value="{{ tc.id}}" selected="selected"> {{ tc.name }} </option>
 		    {% else %}

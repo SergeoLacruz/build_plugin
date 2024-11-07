@@ -6,11 +6,11 @@
 
 
 {% block page_content %}
-<h1>{{ build_plugin.We.name }}</h1>
+<h1>{{ build_plugin.customer_company.name }}</h1>
 
-<p>{{ build_plugin.We.primary_address.line1 }}<br/>
-   {{ build_plugin.We.primary_address.postal_code }} {{ build_plugin.We.primary_address.postal_city }}<br>
-   {{ build_plugin.We.email }} <br>
+<p>{{ build_plugin.customer_company.primary_address.line1 }}<br/>
+   {{ build_plugin.customer_company.primary_address.postal_code }} {{ build_plugin.customer_company.primary_address.postal_city }}<br>
+   {{ build_plugin.customer_company.email }} <br>
    {% now "jS F Y " %}</p>
 
 <h3>To:</h3>
@@ -68,7 +68,7 @@ We like to have printend circuits boards assembled. Here are the key parameters:
 </tr>
 <tr>
 	<td>Number of components on board</td>
-	<td>{% decimal build_plugin.TotalNumberOfComponents %}</td>
+	<td>{% decimal build_plugin.total_components %}</td>
 </tr>
 <tr>
 	<td>Number of codes in BOM</td>
