@@ -2,67 +2,53 @@
 
 <script>
 async function SelectCompany(){
-    const ems_pk = parseInt(document.getElementById("ems").value)
-    const technical_contact = parseInt(document.getElementById("technical_contact").value)
-    const ems_contact = parseInt(document.getElementById("ems_contact").value)
-    const layer_count = parseInt(document.getElementById("LayNo").value)
-    const boards_in_panel = parseInt(document.getElementById("boards_in_panel").value)
-    const size = document.getElementById("size").value
-    const both_sides = parseInt(document.getElementById("both_sides").value)
     const cmd_url="{% url 'plugin:buildorderdata:transfer_build_data' %}";
     data = {
-	ems_pk: ems_pk,
-	technical_contact: technical_contact,
-	layer_count: layer_count,
-	boards_in_panel: boards_in_panel,
-	size: size,
-	both_sides: both_sides,
-	ems_contact: ems_contact
-   }
+        ems_company_pk: parseInt(document.getElementById("ems_company_field").value),
+        customer_contact: parseInt(document.getElementById("customer_contact_field").value),
+        layer_count: parseInt(document.getElementById("LayNo").value),
+        boards_in_panel: parseInt(document.getElementById("boards_in_panel").value),
+        size: document.getElementById("size").value,
+        both_sides: parseInt(document.getElementById("both_sides").value),
+        material_provisioning: parseInt(document.getElementById("material_provisioning").value),
+        sample_approval: parseInt(document.getElementById("sample_approval").value),
+        ems_contact_pk: parseInt(document.getElementById("ems_contact_field").value)
+    }
     response = inventreeFormDataUpload(url=cmd_url, data=JSON.stringify(data))
 }
 
 function ListenEvent(){
 
-    while (ems_contact.options.length > 0) {
-        ems_contact.remove(0);
+    while (ems_contact_field.options.length > 0) {
+        ems_contact_field.remove(0);
     }
-    const ems_pk = parseInt(document.getElementById("ems").value)
+    const ems_company_pk = parseInt(document.getElementById("ems_company_field").value)
     {% for contact in plugin.contacts %}  
-	if ("{{  contact.company.pk }}" == ems_pk) {
-	    var opt = "{{ contact.name }}";
-	    var name = "{{ contact.name }}";
-	    var pk = "{{ contact.pk }}";
-	    var el = document.createElement("option");
-	    el.textContent = name;
-	    el.value = pk;
-	    ems_contact.appendChild(el);
-	}
+        if ("{{ contact.company.pk }}" == ems_company_pk) {
+            var el = document.createElement("option");
+            el.textContent = "{{ contact.name }}";
+            el.value = "{{ contact.pk }}";
+            if ("{{ contact.pk }}" == "{{ build.metadata.ems_contact_pk }}") {
+                el.selected="selected";
+
+            }
+            ems_contact_field.appendChild(el);
+        }
     {% endfor %}
 }
-
 </script>
 
-{% if plugin.Message == "200 OK" %}
-	<div class='alert alert-block alert-info'>
-	{{ plugin.Message }}
-	</div>
-{% else %}
-	</div>
-{% endif %}
-
-
 <table class='table table-condensed'>
-	    <form>
+<form>
 <thead>
     <tr>
-	<td> {% trans "Name" %} </td>
-	<td> {% trans "Data" %} </td>
+        <td> {% trans "Name" %} </td>
+        <td> {% trans "Data" %} </td>
     </tr>
 </thead>
 <tbody>
     <tr>
-	<td>  Codes in BOM </td>
+        <td>  Codes in BOM </td>
         <td> {{ build.part.bom_items.count }} </td>
     </tr>
     <tr>
@@ -72,13 +58,13 @@ function ListenEvent(){
     <tr>
         <td> Number of Layers </td>
         <td> 
-	        <input id="LayNo" type="number" value="{{ build.metadata.layer_count }}">
+                <input id="LayNo" type="number" value="{{ build.metadata.layer_count }}">
         </td>
     </tr>
     <tr>
         <td> Number of Boards in Panel </td>
         <td> 
-	        <input id="boards_in_panel" type="number"  value="{{ build.metadata.boards_in_panel }}">
+                <input id="boards_in_panel" type="number"  value="{{ build.metadata.boards_in_panel }}">
         </td>
     </tr>
     <tr>
@@ -90,66 +76,89 @@ function ListenEvent(){
     <tr>
         <td> EMS Partner </td>
         <td> 
-	    <select id="ems">
-		{% for company in plugin.companies %}
-		{% if company.pk == build.metadata.ems_pk %}
-		    <option value="{{ company.id }}" selected="selected"> {{ company.name }} </option>
-		{% else %}
-		    <option value="{{ company.id }}"> {{ company.name }} </option>
-		{% endif %}
-		{% endfor %}
-	    </select>
+            <select id="ems_company_field">
+                {% for company in plugin.companies %}
+		    {% if company.pk == build.metadata.ems_company_pk %}
+			<option value="{{ company.id }}" selected="selected"> {{ company.name }} </option>
+		    {% else %}
+			<option value="{{ company.id }}"> {{ company.name }} </option>
+		    {% endif %}
+                {% endfor %}
+            </select>
         </td>
     </tr>
     <tr>
         <td> EMS Partner Contact </td>
         <td> 
-	    <select id="ems_contact">
-	    </select>
+            <select id="ems_contact_field">
+            </select>
     <tr>
         <td> Double side assembly </td>
         <td> 
-	    <select id="both_sides">
-		{% if 1 == build.metadata.both_sides %}
-	        <option value="1" selected="selected"> Yes </option>
-	        <option value="0"> No </option>
-		{% else %}
-	        <option value="1"> Yes </option>
-	        <option value="0" selected='selected'> No </option>
-		{% endif %}
-	    </select>
+            <select id="both_sides">
+                {% if 1 == build.metadata.both_sides %}
+                <option value="1" selected="selected"> Yes </option>
+                <option value="0"> No </option>
+                {% else %}
+                <option value="1"> Yes </option>
+                <option value="0" selected='selected'> No </option>
+                {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td> Material provisioning </td>
+        <td> 
+            <select id="material_provisioning">
+                {% if 1 == build.metadata.material_provisioning %}
+                <option value="1" selected="selected"> Yes </option>
+                <option value="0"> No </option>
+                {% else %}
+                <option value="1"> Yes </option>
+                <option value="0" selected='selected'> No </option>
+                {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td> Approval of first sample </td>
+        <td> 
+            <select id="sample_approval">
+                {% if 1 == build.sample_approval %}
+                <option value="1" selected="selected"> Yes </option>
+                <option value="0"> No </option>
+                {% else %}
+                <option value="1"> Yes </option>
+                <option value="0" selected='selected'> No </option>
+                {% endif %}
+            </select>
         </td>
     </tr>
     <tr>
         <td> Technical Contact </td>
         <td> 
-	    <select id="technical_contact">
-		{% for tc in plugin.WeContacts %}
-		{% if tc.pk == build.metadata.technical_contact %}
-		    <option value="{{ tc.id}}" selected="selected"> {{ tc.name }} </option>
-		{% else %}
-		    <option value="{{ tc.id }}"> {{ tc.name }} </option>
-		{% endif %}
-		{% endfor %}
-	    </select>
+            <select id="customer_contact_field">
+                {% for tc in plugin.WeContacts %}
+		    {% if tc.pk == build.metadata.customer_contact %}
+			<option value="{{ tc.id}}" selected="selected"> {{ tc.name }} </option>
+		    {% else %}
+			<option value="{{ tc.id }}"> {{ tc.name }} </option>
+		    {% endif %}
+                {% endfor %}
+            </select>
         </td>
     </tr>
 </tbody>
-<tfoot>
-    <tr>
-	<td>
-            <input type="button" value="Save" onclick="SelectCompany()" title='Save Data' />
-	</td>
-	<td> </td>
-    </tr>
-</tfoot>
+    <tfoot>
+	<tr>
+	    <td> <input type="button" value="Save" onclick="SelectCompany()" title='Save Data' /> </td>
+	    <td> </td>
+	</tr>
+    </tfoot>
 </form>
 </table>
-
-
 <script>
-//document.getElementById("ems").addEventListener("click",ListenEvent);
-document.getElementById("ems").onchange = ListenEvent;
-const ems_contact=document.getElementById("ems_contact")
-ListenEvent()
+    //document.getElementById("ems_company_field").addEventListener("click",ListenEvent);
+    document.getElementById("ems_company_field").onchange = ListenEvent;
+    ListenEvent()
 </script>

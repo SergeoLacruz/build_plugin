@@ -1,6 +1,4 @@
-#from django.conf.urls import url
 from django.urls import re_path
-#from django.urls import path
 from django.http import HttpResponse
 
 from build.views import BuildDetail
@@ -9,7 +7,6 @@ from plugin import InvenTreePlugin
 from plugin.mixins import PanelMixin, SettingsMixin, UrlsMixin, ReportMixin
 from company.models import Company, Contact
 from users.models import check_user_role
-from django.views.generic.edit import FormView
 
 import json
 
@@ -32,7 +29,6 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             'model': 'company.company',
         },
     }
-
 
 # Create some help  
     def get_settings_content(self, request):
@@ -74,17 +70,17 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
 
             # Grab metadata if exist and create the context variables for the report
             try:
-                self.ems=Company.objects.get(pk=self.build.metadata['ems_pk'])
+                self.ems=Company.objects.get(pk=self.build.metadata['ems_company_pk'])
             except:
-                print('error ems_pk')
+                print('error ems_company_pk')
             try:
-                self.CompanyContact=Contact.objects.get(pk=self.build.metadata['ems_contact'])
+                self.ems_contact=Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
             except:
-                print('error EMSCONTACT')
+                print('error ems_contact_pk')
             try:
-                self.TechnicalContact=Contact.objects.get(pk=self.build.metadata['technical_contact'])
+                self.customer_contact=Contact.objects.get(pk=self.build.metadata['customer_contact'])
             except:
-                print('error TECHNICALCONTACT')
+                print('error customer_contact')
 
             HasPermission=(check_user_role(view.request.user, 'build_order','change') or 
                            check_user_role(view.request.user, 'build_order','delete') or
