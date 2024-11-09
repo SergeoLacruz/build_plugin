@@ -52,7 +52,7 @@ We like to have printend circuits boards assembled. Here are the key parameters:
 </tr>
 <tr>
 	<td>Bare PCB Name</td>
-	<td>{{build_plugin.RelatedPCB.IPN}}</td> 
+	<td>{{build_plugin.build_data.pcb_name}}</td> 
 </tr>
 <tr>
 	<td>Number of boards</td>
@@ -60,11 +60,11 @@ We like to have printend circuits boards assembled. Here are the key parameters:
 </tr>
 <tr>
 	<td>Board size</td>
-	<td>{{ build.metadata.size }}</td>
+	<td> {{ build_plugin.build_data.Width }} x {{ build_plugin.build_data.Length }} </td>
 </tr>
 <tr>
 	<td>Number of layers in board</td>
-	<td>{{ build.metadata.layer_count }}</td>
+	<td> {{ build_plugin.build_data.Layers }} </td>
 </tr>
 <tr>
 	<td>Number of components on board</td>

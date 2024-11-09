@@ -49,8 +49,15 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             self.build=view.get_object()
             self.companies=Company.objects.filter(is_supplier=True)
             self.contacts=Contact.objects.filter()
-            self.RelatedPCB=list(self.build.part.get_related_parts())[0]
 
+            # Grab PCB data from the PCB parameters
+            self.build_data = {}
+            related_pcb=list(self.build.part.get_related_parts())[0]
+            self.build_data['pcb_name'] = related_pcb.IPN
+            for parameter in related_pcb.parameters.all():
+                self.build_data[parameter.name]=parameter.data
+
+            # Find our company and the contacts für the EMS partner
             try:
                 customer_pk=int(self.get_setting('MY_PK'))
             except:

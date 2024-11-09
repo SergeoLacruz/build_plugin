@@ -6,10 +6,7 @@ async function SelectCompany(){
     data = {
         ems_company_pk: parseInt(document.getElementById("ems_company_field").value),
         customer_contact: parseInt(document.getElementById("customer_contact_field").value),
-        layer_count: parseInt(document.getElementById("LayNo").value),
         boards_in_panel: parseInt(document.getElementById("boards_in_panel").value),
-        size: document.getElementById("size").value,
-        both_sides: parseInt(document.getElementById("both_sides").value),
         material_provisioning: parseInt(document.getElementById("material_provisioning").value),
         sample_approval: parseInt(document.getElementById("sample_approval").value),
         ems_contact_pk: parseInt(document.getElementById("ems_contact_field").value)
@@ -48,6 +45,10 @@ function ListenEvent(){
 </thead>
 <tbody>
     <tr>
+        <td>  Related PCB </td>
+        <td> {{ plugin.build_data.pcb_name }} </td>
+    </tr>
+    <tr>
         <td>  Codes in BOM </td>
         <td> {{ build.part.bom_items.count }} </td>
     </tr>
@@ -57,20 +58,20 @@ function ListenEvent(){
     </tr>
     <tr>
         <td> Number of Layers </td>
-        <td> 
-                <input id="LayNo" type="number" value="{{ build.metadata.layer_count }}">
-        </td>
+        <td> {{ plugin.build_data.Layers }} </td>
+    </tr>
+    <tr>
+        <td> Size of Board in mm</td>
+        <td> {{ plugin.build_data.Width }} x {{ plugin.build_data.Length }} </td>
+    </tr>
+    <tr>
+        <td> Double side assembly </td>
+        <td> {{ plugin.build_data.DualSide }} </td>
     </tr>
     <tr>
         <td> Number of Boards in Panel </td>
         <td> 
                 <input id="boards_in_panel" type="number"  value="{{ build.metadata.boards_in_panel }}">
-        </td>
-    </tr>
-    <tr>
-        <td> Size of Board in mm</td>
-        <td> 
-                <input id="size" type="text" value="{{ build.metadata.size }}">
         </td>
     </tr>
     <tr>
@@ -92,20 +93,6 @@ function ListenEvent(){
         <td> 
             <select id="ems_contact_field">
             </select>
-    <tr>
-        <td> Double side assembly </td>
-        <td> 
-            <select id="both_sides">
-                {% if 1 == build.metadata.both_sides %}
-                <option value="1" selected="selected"> Yes </option>
-                <option value="0"> No </option>
-                {% else %}
-                <option value="1"> Yes </option>
-                <option value="0" selected='selected'> No </option>
-                {% endif %}
-            </select>
-        </td>
-    </tr>
     <tr>
         <td> Material provisioning </td>
         <td> 
