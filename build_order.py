@@ -71,23 +71,31 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
                 print('Name:',p.attachment)
 
             # Calculate the total number of components on the board
-            self.total_components=0
+            self.build_data['total_components']=0
             for p in self.build.part.bom_items.all():
-                self.total_components = self.total_components + p.quantity
+                self.build_data['total_components'] = self.build_data['total_components'] + p.quantity
 
-            # Grab metadata if exist and create the context variables for the report
+            # Grab metadata if exist and put it into the build_data dict
             try:
-                self.ems=Company.objects.get(pk=self.build.metadata['ems_company_pk'])
+                self.build_data['ems_company'] = Company.objects.get(pk=self.build.metadata['ems_company_pk'])
             except:
                 print('error ems_company_pk')
             try:
-                self.ems_contact=Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
+                self.build_data['ems_contact']=Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
             except:
                 print('error ems_contact_pk')
             try:
-                self.customer_contact=Contact.objects.get(pk=self.build.metadata['customer_contact'])
+                self.build_data['customer_contact']=Contact.objects.get(pk=self.build.metadata['customer_contact'])
             except:
                 print('error customer_contact')
+            try:
+                self.build_data['material_provisioning']=self.build.metadata['material_provisioning']
+            except:
+                print('error material_provisioning')
+            try:
+                self.build_data['sample_approval']=self.build.metadata['sample_approval']
+            except:
+                print('error sample_approval')
 
             has_permission=(check_user_role(view.request.user, 'build_order','change') or 
                            check_user_role(view.request.user, 'build_order','delete') or
@@ -115,9 +123,11 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             print(key, data[key])
             self.build.metadata[key]=data[key]
         self.build.save()
-        self.ems_contact=Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
-        self.ems=Company.objects.get(pk=self.build.metadata['ems_company_pk'])
-        self.customer_contact=Contact.objects.get(pk=self.build.metadata['customer_contact'])
+        self.build_data['ems_company'] = Company.objects.get(pk=self.build.metadata['ems_company_pk'])
+        self.build_data['ems_contact'] = Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
+        self.build_data['customer_contact'] = Contact.objects.get(pk=self.build.metadata['customer_contact'])
+        self.build_data['material_provisioning']=self.build.metadata['material_provisioning']
+        self.build_data['sample_approval']=self.build.metadata['sample_approval']
         return HttpResponse(f'OK')
 
 #-------------------- Add context data for report generation -------------------

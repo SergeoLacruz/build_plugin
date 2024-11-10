@@ -7,8 +7,8 @@ async function SelectCompany(){
         ems_company_pk: parseInt(document.getElementById("ems_company_field").value),
         customer_contact: parseInt(document.getElementById("customer_contact_field").value),
         boards_in_panel: parseInt(document.getElementById("boards_in_panel").value),
-        material_provisioning: parseInt(document.getElementById("material_provisioning").value),
-        sample_approval: parseInt(document.getElementById("sample_approval").value),
+        material_provisioning: document.getElementById("material_provisioning").value,
+        sample_approval: document.getElementById("sample_approval").value,
         ems_contact_pk: parseInt(document.getElementById("ems_contact_field").value)
     }
     response = inventreeFormDataUpload(url=cmd_url, data=JSON.stringify(data))
@@ -25,9 +25,8 @@ function ListenEvent(){
             var el = document.createElement("option");
             el.textContent = "{{ contact.name }}";
             el.value = "{{ contact.pk }}";
-            if ("{{ contact.pk }}" == "{{ build.metadata.ems_contact_pk }}") {
+            if ("{{ contact }}" == "{{ plugin.build_data.ems_contact }}") {
                 el.selected="selected";
-
             }
             ems_contact_field.appendChild(el);
         }
@@ -54,7 +53,7 @@ function ListenEvent(){
     </tr>
     <tr>
         <td> Total number of components </td>
-        <td> {{ plugin.total_components }} </td>
+        <td> {{ plugin.build_data.total_components }} </td>
     </tr>
     <tr>
         <td> Number of Layers </td>
@@ -79,10 +78,10 @@ function ListenEvent(){
         <td> 
             <select id="ems_company_field">
                 {% for company in plugin.companies %}
-		    {% if company.pk == build.metadata.ems_company_pk %}
-			<option value="{{ company.id }}" selected="selected"> {{ company.name }} </option>
+		    {% if company == plugin.build_data.ems_company %}
+			<option value="{{ company.pk }}" selected="selected"> {{ company.name }} </option>
 		    {% else %}
-			<option value="{{ company.id }}"> {{ company.name }} </option>
+			<option value="{{ company.pk }}"> {{ company.name }} </option>
 		    {% endif %}
                 {% endfor %}
             </select>
@@ -94,15 +93,15 @@ function ListenEvent(){
             <select id="ems_contact_field">
             </select>
     <tr>
-        <td> Material provisioning </td>
+	    <td> Material provisioning {{plugin.build_data.material_provisioning}} </td>
         <td> 
             <select id="material_provisioning">
-                {% if 1 == build.metadata.material_provisioning %}
-                <option value="1" selected="selected"> Yes </option>
-                <option value="0"> No </option>
+                {% if plugin.build_data.material_provisioning == "Yes" %}
+                <option value="Yes" selected="selected"> Yes </option>
+                <option value="No"> No </option>
                 {% else %}
-                <option value="1"> Yes </option>
-                <option value="0" selected='selected'> No </option>
+                <option value="Yes"> Yes </option>
+                <option value="No" selected='selected'> No </option>
                 {% endif %}
             </select>
         </td>
@@ -111,12 +110,12 @@ function ListenEvent(){
         <td> Approval of first sample </td>
         <td> 
             <select id="sample_approval">
-                {% if 1 == build.sample_approval %}
-                <option value="1" selected="selected"> Yes </option>
-                <option value="0"> No </option>
+                {% if plugin.build_data.sample_approval == "Yes" %}
+                <option value="Yes" selected="selected"> Yes </option>
+                <option value="No"> No </option>
                 {% else %}
-                <option value="1"> Yes </option>
-                <option value="0" selected='selected'> No </option>
+                <option value="Yes"> Yes </option>
+                <option value="No" selected='selected'> No </option>
                 {% endif %}
             </select>
         </td>
@@ -126,10 +125,10 @@ function ListenEvent(){
         <td> 
             <select id="customer_contact_field">
                 {% for tc in plugin.all_customer_contacts %}
-		    {% if tc.pk == build.metadata.customer_contact %}
-			<option value="{{ tc.id}}" selected="selected"> {{ tc.name }} </option>
+		    {% if tc == plugin.build_data.customer_contact %}
+			<option value="{{ tc.pk}}" selected="selected"> {{ tc.name }} </option>
 		    {% else %}
-			<option value="{{ tc.id }}"> {{ tc.name }} </option>
+			<option value="{{ tc.pk }}"> {{ tc.name }} </option>
 		    {% endif %}
                 {% endfor %}
             </select>
