@@ -115,6 +115,9 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             print(key, data[key])
             self.build.metadata[key]=data[key]
         self.build.save()
+        self.ems_contact=Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
+        self.ems=Company.objects.get(pk=self.build.metadata['ems_company_pk'])
+        self.customer_contact=Contact.objects.get(pk=self.build.metadata['customer_contact'])
         return HttpResponse(f'OK')
 
 #-------------------- Add context data for report generation -------------------
