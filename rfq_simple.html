@@ -15,15 +15,15 @@
 
 <h3>To:</h3>
 <p>
-{{ build_plugin.ems.name }}<br/>
-{{ build_plugin.ems_contact.name}}<br/>
-{{ build_plugin.ems.primary_address.line1 }} <br>
-{{ build_plugin.ems.primary_address.postal_code }} {{ build_plugin.ems.primary_address.postal_city }}<br> 
+{{ build_plugin.build_data.ems_company.name }}<br/>
+{{ build_plugin.build_data.ems_contact.name}}<br/>
+{{ build_plugin.build_data.ems_company.primary_address.line1 }} <br>
+{{ build_plugin.build_data.ems_company.primary_address.postal_code }} {{ build_plugin.ems_company.primary_address.postal_city }}<br> 
 </p>
 
 <h3>Request for Quotation</h3>
 
-<p>Dear Mr. {{ build_plugin.ems_contact.name }}, </p>
+<p>Dear Mr. {{ build_plugin.build_data.ems_contact.name }}, </p>
 
 <p>
 We like to have printend circuits boards assembled. Here are the key parameters:
@@ -60,11 +60,11 @@ We like to have printend circuits boards assembled. Here are the key parameters:
 </tr>
 <tr>
 	<td>Board size</td>
-	<td> {{ build_plugin.build_data.Width }} x {{ build_plugin.build_data.Length }} </td>
+	<td> {{ build_plugin.build_data.PARAMETER_WIDTH }} x {{ build_plugin.build_data.PARAMETER_LENGTH }} </td>
 </tr>
 <tr>
 	<td>Number of layers in board</td>
-	<td> {{ build_plugin.build_data.Layers }} </td>
+	<td> {{ build_plugin.build_data.PARAMETER_LAYNO }} </td>
 </tr>
 <tr>
 	<td>Material provisioning </td>
@@ -72,7 +72,7 @@ We like to have printend circuits boards assembled. Here are the key parameters:
 </tr>
 <tr>
 	<td>Number of components on board</td>
-	<td>{% decimal build_plugin.total_components %}</td>
+	<td>{% decimal build_plugin.build_data.total_components %}</td>
 </tr>
 <tr>
 	<td>Number of codes in BOM</td>
@@ -81,9 +81,9 @@ We like to have printend circuits boards assembled. Here are the key parameters:
 <tr>
 	<td>Contact for technical questions</td>
 	<td>
-		{{ build_plugin.customer_contact.name }}<br>
-		{{ build_plugin.customer_contact.phone }}<br>
-		{{ build_plugin.customer_contact.email }}
+		{{ build_plugin.build_data.customer_contact.name }}<br>
+		{{ build_plugin.build_data.customer_contact.phone }}<br>
+		{{ build_plugin.build_data.customer_contact.email }}
 	</td>
 </tr>
 </tbody>

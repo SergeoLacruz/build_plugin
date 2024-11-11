@@ -25,8 +25,28 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
     SETTINGS = {
         'MY_PK': {
             'name': 'PK of our company',
-            'description': 'We put our own company int othe database. So we can add addresses and contacts',
+            'description': 'We put our own company into the database. So we can add addresses and contacts',
             'model': 'company.company',
+        },
+        'PARAMETER_WIDTH': {
+            'name': 'Parameter for PCB width',
+            'description': 'Place here the PK of the parameter used for PCB width',
+            'model': 'part.partparametertemplate',
+        },
+        'PARAMETER_LENGTH': {
+            'name': 'Parameter for PCB length',
+            'description': 'Place here the PK of the parameter used for PCB length',
+            'model': 'part.partparametertemplate',
+        },
+        'PARAMETER_LAYNO': {
+            'name': 'Parameter for PCB number of layers',
+            'description': 'Place here the PK of the parameter used for the number of layers in the PCB',
+            'model': 'part.partparametertemplate',
+        },
+        'PARAMETER_DUAL': {
+            'name': 'Parameter for dual side assembly',
+            'description': 'Place here the PK of the parameter used for dual side assembly',
+            'model': 'part.partparametertemplate',
         },
     }
 
@@ -45,6 +65,7 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
 # Create the panel that will display on the BuildOrder view,
     def get_custom_panels(self, view, request):
         panels = []
+        parameters = ['PARAMETER_WIDTH','PARAMETER_LENGTH','PARAMETER_LAYNO','PARAMETER_DUAL']
         if isinstance(view, BuildDetail):
             self.build=view.get_object()
             self.companies=Company.objects.filter(is_supplier=True)
@@ -55,7 +76,12 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             related_pcb=list(self.build.part.get_related_parts())[0]
             self.build_data['pcb_name'] = related_pcb.IPN
             for parameter in related_pcb.parameters.all():
-                self.build_data[parameter.name]=parameter.data
+                for par in parameters:
+                    try: 
+                        if parameter.template.pk == int(self.get_setting(par)):
+                            self.build_data[par]=parameter.data
+                    except Exception:
+                        self.build_data[par]='Parameter pk not defined'
 
             # Find our company and the contacts für the EMS partner
             try:
@@ -124,7 +150,10 @@ class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Rep
             self.build.metadata[key]=data[key]
         self.build.save()
         self.build_data['ems_company'] = Company.objects.get(pk=self.build.metadata['ems_company_pk'])
-        self.build_data['ems_contact'] = Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
+        try:
+            self.build_data['ems_contact'] = Contact.objects.get(pk=self.build.metadata['ems_contact_pk'])
+        except Exception:
+            pass
         self.build_data['customer_contact'] = Contact.objects.get(pk=self.build.metadata['customer_contact'])
         self.build_data['material_provisioning']=self.build.metadata['material_provisioning']
         self.build_data['sample_approval']=self.build.metadata['sample_approval']
