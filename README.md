@@ -40,8 +40,7 @@ Actually this is not finished but a good example for panel UI, data storage and 
 
 ## Installation
 
-There is no installation package yet. Just copy python and templates to src/inventree/plugins
-and load the report template.
+pip install git+https://github.com/SergeoLacruz/inventree-supplier-sync
 
 ## Configuration Options
 
