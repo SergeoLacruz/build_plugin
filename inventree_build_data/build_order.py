@@ -10,7 +10,7 @@ from users.models import check_user_role
 import json
 
 
-class BuildOrderPanel(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, ReportMixin):
+class BuildOrderData(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, ReportMixin):
 
     # Define data that is displayed on the panel
 
