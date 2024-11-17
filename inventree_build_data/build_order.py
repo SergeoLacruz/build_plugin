@@ -6,6 +6,7 @@ from plugin import InvenTreePlugin
 from plugin.mixins import PanelMixin, SettingsMixin, UrlsMixin, ReportMixin
 from company.models import Company, Contact
 from users.models import check_user_role
+from inventree_build_data.version import PLUGIN_VERSION
 
 import json
 
@@ -20,7 +21,7 @@ class BuildOrderData(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Repo
     AUTHOR = "Michael"
     PUBLISH_DATE = "2023-11-11:00:00"
     DESCRIPTION = "This plugin adds data for external manufacturing to a build order"
-    VERSION = '0.0.1'
+    VERSION = PLUGIN_VERSION
 
     SETTINGS = {
         'MY_PK': {
@@ -123,9 +124,9 @@ class BuildOrderData(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Repo
             except Exception:
                 print('error sample_approval')
 
-            has_permission = (check_user_role(view.request.user, 'build_order', 'change') or
-                              check_user_role(view.request.user, 'build_order', 'delete') or
-                              check_user_role(view.request.user, 'build_order', 'add'))
+            has_permission = (check_user_role(view.request.user, 'build_order', 'change')
+                              or check_user_role(view.request.user, 'build_order', 'delete')
+                              or check_user_role(view.request.user, 'build_order', 'add'))
             if has_permission:
                 panels.append({
                     'title': 'Manufacturig Info',
