@@ -7,6 +7,14 @@ data. It adds a panel to the build details view. In this panel you can add relev
 that are needed in case you wand to have PCBs manufactured by an external partner. Other
 production relevant figures are extracted from the InvenTree database.
 
+## Installation
+
+```
+pip install git+https://github.com/SergeoLacruz/inventree-supplier-sync
+```
+
+The additional panel looks like that:
+
 ![build_plugin](https://github.com/SergeoLacruz/build_plugin/blob/main/pictures/build_panel.png)
 
 The total number of components on the board is calculated by counting the parts in the BOM
@@ -37,10 +45,6 @@ to the external partner.
 ![request fpr quotation](https://github.com/SergeoLacruz/build_plugin/blob/main/pictures/rfq.png)
 
 Actually this is not finished but a good example for panel UI, data storage and reporting.
-
-## Installation
-
-pip install git+https://github.com/SergeoLacruz/inventree-supplier-sync
 
 ## Configuration Options
 
