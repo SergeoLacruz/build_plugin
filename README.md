@@ -10,7 +10,7 @@ production relevant figures are extracted from the InvenTree database.
 ## Installation
 
 ```
-pip install git+https://github.com/SergeoLacruz/inventree-supplier-sync
+pip install git+https://github.com/SergeoLacruz/inventree-build-data
 ```
 
 The additional panel looks like that:
