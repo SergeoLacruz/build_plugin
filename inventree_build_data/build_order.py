@@ -74,15 +74,21 @@ class BuildOrderData(PanelMixin, SettingsMixin, InvenTreePlugin, UrlsMixin, Repo
 
             # Grab PCB data from the PCB parameters
             self.build_data = {}
-            related_pcb = list(self.build.part.get_related_parts())[0]
-            self.build_data['pcb_name'] = related_pcb.IPN
-            for parameter in related_pcb.parameters.all():
-                for par in parameters:
-                    try:
-                        if parameter.template.pk == int(self.get_setting(par)):
-                            self.build_data[par] = parameter.data
-                    except Exception:
-                        self.build_data[par] = 'Parameter pk not defined'
+            try:
+                related_pcb = list(self.build.part.get_related_parts())[0]
+            except Exception:
+                related_pcb = None
+            if related_pcb is not None:
+                self.build_data['pcb_name'] = related_pcb.IPN
+                for parameter in related_pcb.parameters.all():
+                    for par in parameters:
+                        try:
+                            if parameter.template.pk == int(self.get_setting(par)):
+                                self.build_data[par] = parameter.data
+                        except Exception:
+                            self.build_data[par] = 'Parameter pk not defined'
+            else:
+                self.build_data['pcb_name'] = 'No related PCB found'
 
             # Find our company and the contacts für the EMS partner
             try:
